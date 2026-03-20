@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/caloriesLeft"
         android:layout_width="211dp"
         android:layout_height="99dp"
         android:text="This is where the calorie budget will go right?"

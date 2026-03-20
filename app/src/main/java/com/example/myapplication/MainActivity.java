@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateCaloriesLeft();
             }
         });
+
+        updateCaloriesLeft();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateCaloriesLeft();
     }
 
@@ -70,21 +78,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (v.getId() == R.id.record_button){
             myIntent = new Intent(this, Records.class);
             startActivity(myIntent);
-            //open the records activity
         }
         else if (v.getId() == R.id.add_food_button){
             Toast toast = Toast.makeText(this, "Add Food clicked", Toast.LENGTH_SHORT);
             toast.show();
-            //activiate the add food functionality
         }
     }
 
     private void updateCaloriesLeft() {
-        int maxCalories = 2000;
+        SharedPreferences prefs = getSharedPreferences("UserSettings", MODE_PRIVATE);
+
+        if (!prefs.contains("calorieGoal")) {
+            caloriesLeft.setText("Please set your calorie goal in Settings");
+            return;
+        }
+
+        int maxCalories = prefs.getInt("calorieGoal", 2000);
+
         int used = 0;
-        for(int c : calorieList) {
+        for (int c : calorieList) {
             used += c;
         }
+
         int remaining = maxCalories - used;
         caloriesLeft.setText("Calories Left: " + remaining);
     }

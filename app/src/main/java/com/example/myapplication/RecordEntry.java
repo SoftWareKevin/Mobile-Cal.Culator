@@ -1,26 +1,26 @@
 package com.example.myapplication;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Dao;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class RecordEntry {
+    //absolutely not a good name for the class/table but I chose it and if I understand it its fine
     @PrimaryKey(autoGenerate = true)
-    int uid;
+    public int uid;
     @ColumnInfo
-    int date; //
+    public int date; //uses the unix timestamp
     @ColumnInfo
-    String foodName;
+    public String foodName;
     @ColumnInfo
-    int calories;
+    public int calories;
     @ColumnInfo
-    int carbs;
+    public int carbs;
     @ColumnInfo
-    int fat;
+    public int fat;
     @ColumnInfo
-    int protein;
+    public int protein;
 
     }
 

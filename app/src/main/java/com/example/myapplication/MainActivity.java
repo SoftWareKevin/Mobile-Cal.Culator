@@ -1,33 +1,32 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import android.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.room.Room;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button settings_button;
     Button record_button;
     Button add_food_button;
+    Button removeBtn;
+    ListView listView;
+    TextView caloriesLeft;
 
-    ArrayList<String> foodRecords = new ArrayList<>();
+    ArrayList<String> foodList = new ArrayList<>();
+    ArrayList<Integer> calorieList = new ArrayList<>();
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +34,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        //this code handles the database object instantiation
+        RecordsDatabase db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "Kevin's-uber-cool-db").build();
+
         settings_button = findViewById(R.id.settings_button);
         record_button = findViewById(R.id.record_button);
         add_food_button = findViewById(R.id.add_food_button);
+        removeBtn = findViewById(R.id.removeBtn);
+        listView = findViewById(R.id.listView);
+        caloriesLeft = findViewById(R.id.caloriesLeft);
 
         settings_button.setOnClickListener(this);
         record_button.setOnClickListener(this);
         add_food_button.setOnClickListener(this);
 
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, foodList);
+        listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+        removeBtn.setOnClickListener(v -> {
+            int pos = listView.getCheckedItemPosition();
+            if (pos != ListView.INVALID_POSITION) {
+                foodList.remove(pos);
+                calorieList.remove(pos);
+                adapter.notifyDataSetChanged();
+                listView.clearChoices();
+                updateCaloriesLeft();
+            }
+        });
 
+        updateCaloriesLeft();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCaloriesLeft();
     }
 
     @Override
@@ -56,53 +81,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v.getId() == R.id.record_button){
             myIntent = new Intent(this, Records.class);
-            myIntent.putStringArrayListExtra("records", foodRecords);
             startActivity(myIntent);
-            //open the records activity
         }
         else if (v.getId() == R.id.add_food_button){
-            showAddFoodDialog();
-            //activate the add food functionality
+            Toast toast = Toast.makeText(this, "Add Food clicked", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
-    private void showAddFoodDialog() {
 
+    private void updateCaloriesLeft() {
+        SharedPreferences prefs = getSharedPreferences("UserSettings", MODE_PRIVATE);
 
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_food, null);
+        if (!prefs.contains("calorieGoal")) {
+            caloriesLeft.setText("Please set your calorie goal in Settings");
+            return;
+        }
 
-        EditText foodInput = dialogView.findViewById(R.id.foodInput);
-        EditText caloriesInput = dialogView.findViewById(R.id.caloriesInput);
-        EditText proteinInput = dialogView.findViewById(R.id.proteinInput);
-        EditText carbsInput = dialogView.findViewById(R.id.carbsInput);
-        EditText fatInput = dialogView.findViewById(R.id.fatInput);
+        int maxCalories = prefs.getInt("calorieGoal", 2000);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Food");
-        builder.setView(dialogView);
+        int used = 0;
+        for (int c : calorieList) {
+            used += c;
+        }
 
-        builder.setPositiveButton("Submit", (dialog, which) -> {
-
-            String foodName = foodInput.getText().toString();
-            int calories = Integer.parseInt(caloriesInput.getText().toString());
-
-            HashMap<String, Integer> macros = new HashMap<>();
-            macros.put("protein", Integer.parseInt(proteinInput.getText().toString()));
-            macros.put("carbs", Integer.parseInt(carbsInput.getText().toString()));
-            macros.put("fat", Integer.parseInt(fatInput.getText().toString()));
-
-            String record = foodName + " | " + calories + " cal | "
-                    + "P:" + macros.get("protein")
-                    + " C:" + macros.get("carbs")
-                    + " F:" + macros.get("fat");
-
-            foodRecords.add(record);
-
-            Toast.makeText(this, "Food Saved!", Toast.LENGTH_SHORT).show();
-        });
-
-        builder.setNegativeButton("Cancel", null);
-
-        builder.show();
+        int remaining = maxCalories - used;
+        caloriesLeft.setText("Calories Left: " + remaining);
     }
 }

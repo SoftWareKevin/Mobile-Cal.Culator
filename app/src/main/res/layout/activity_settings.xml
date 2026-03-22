@@ -56,6 +56,17 @@
             android:hint="Activity Level (1-4)" />
 
         <Button
+            android:id="@+id/calculateCaloriesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calculate Calorie Options" />
+
+        <Spinner
+            android:id="@+id/spinnerCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
             android:id="@+id/saveSettingsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

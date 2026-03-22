@@ -10,10 +10,15 @@ import java.util.List;
 @Dao
 public interface RecordsDao {
     @Insert
-    void insert(RecordEntry recordEntry);
+    void insertEntry(RecordEntry recordEntry);
 
     @Delete
-    void delete(RecordEntry recordEntry);
+    void deleteEntry(RecordEntry recordEntry);
+
+    @Query("SELECT * FROM RecordEntry WHERE date BETWEEN unixepoch(:date_start) AND unixepoch(:date_end, '-1 second')")
+    List<RecordEntry> getRecordsByDate(long date_start, long date_end);
+
+
 
     @Query("SELECT * FROM RecordEntry")
     List<RecordEntry> getAllRecords();

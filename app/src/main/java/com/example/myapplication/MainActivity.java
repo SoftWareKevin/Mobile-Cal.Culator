@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        //this code handles the database object instantiation
+        RecordsDatabase db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "Kevin's-uber-cool-db").build();
 
         settings_button = findViewById(R.id.settings_button);
         record_button = findViewById(R.id.record_button);

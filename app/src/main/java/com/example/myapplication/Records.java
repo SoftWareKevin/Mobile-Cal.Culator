@@ -55,6 +55,7 @@ public class Records extends AppCompatActivity {
                 reportListView.clearChoices();
             }
         });
+        
         viewBtn.setOnClickListener(v -> {
             int pos=reportListView.getCheckedItemPosition();
             if (pos != ListView.INVALID_POSITION) {

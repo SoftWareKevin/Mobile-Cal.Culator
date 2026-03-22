@@ -10,6 +10,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.widget.EditText;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -84,8 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(myIntent);
         }
         else if (v.getId() == R.id.add_food_button){
-            Toast toast = Toast.makeText(this, "Add Food clicked", Toast.LENGTH_SHORT);
-            toast.show();
+            showAddFoodDialog();
         }
     }
 
@@ -106,5 +109,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int remaining = maxCalories - used;
         caloriesLeft.setText("Calories Left: " + remaining);
+    }
+    private void showAddFoodDialog() {
+
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_food, null);
+
+        EditText foodInput = dialogView.findViewById(R.id.foodInput);
+        EditText caloriesInput = dialogView.findViewById(R.id.caloriesInput);
+        EditText proteinInput = dialogView.findViewById(R.id.proteinInput);
+        EditText carbsInput = dialogView.findViewById(R.id.carbsInput);
+        EditText fatInput = dialogView.findViewById(R.id.fatInput);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Food");
+        builder.setView(dialogView);
+
+        builder.setPositiveButton("Submit", (dialog, which) -> {
+
+            if (foodInput.getText().toString().isEmpty() ||
+                    caloriesInput.getText().toString().isEmpty() ||
+                    proteinInput.getText().toString().isEmpty() ||
+                    carbsInput.getText().toString().isEmpty() ||
+                    fatInput.getText().toString().isEmpty()) {
+
+                Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String foodName = foodInput.getText().toString();
+            int calories = Integer.parseInt(caloriesInput.getText().toString());
+            int protein = Integer.parseInt(proteinInput.getText().toString());
+            int carbs = Integer.parseInt(carbsInput.getText().toString());
+            int fat = Integer.parseInt(fatInput.getText().toString());
+
+// Add to lists
+            foodList.add(foodName + " | " + calories + " cal | P:" + protein + " C:" + carbs + " F:" + fat);
+            calorieList.add(calories);
+
+            adapter.notifyDataSetChanged();
+            updateCaloriesLeft();
+
+            Toast.makeText(this, "Food Added!", Toast.LENGTH_SHORT).show();
+        });
+
+        builder.setNegativeButton("Cancel", null);
+
+        builder.show();
     }
 }

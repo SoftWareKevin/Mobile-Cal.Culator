@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //open the records activity
         }
         else if (v.getId() == R.id.add_food_button){
-            showAddFoodDialog();
+            showAddFooodDialog();
             //activate the add food functionality
         }
     }
-    private void showAddFoodDialog() {
+    private void showAddFooodDialog() {
 
 
         LayoutInflater inflater = getLayoutInflater();

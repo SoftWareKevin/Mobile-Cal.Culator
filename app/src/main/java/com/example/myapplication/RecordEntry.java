@@ -10,6 +10,8 @@ public class RecordEntry {
     @PrimaryKey(autoGenerate = true)
     int uid;
     @ColumnInfo
+    int date; //
+    @ColumnInfo
     String foodName;
     @ColumnInfo
     int calories;

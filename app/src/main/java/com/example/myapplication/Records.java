@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
@@ -58,5 +61,22 @@ public class Records extends AppCompatActivity {
                 Toast.makeText(this, r, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Entity
+    public class LogEntry {
+        @PrimaryKey(autoGenerate = true)
+        int uid;
+        @ColumnInfo
+        String foodName;
+        @ColumnInfo
+        int calories;
+        @ColumnInfo
+        int carbs;
+        @ColumnInfo
+        int fat;
+        @ColumnInfo
+        int protein;
+
     }
 }

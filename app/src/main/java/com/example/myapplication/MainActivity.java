@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button settings_button;
@@ -32,14 +34,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Integer> calorieList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
+    ExecutorService executorService;
+    RecordsDatabase db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        //this code handles the database object instantiation
-        RecordsDatabase db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "Kevin's-uber-cool-db").build();
+        //this code handles the database object binding
+        db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "Kevin's-uber-cool-db").build();
+        RecordsDao recordsDao = db.recordsDao();
+        executorService = Executors.newSingleThreadExecutor();
+
 
         settings_button = findViewById(R.id.settings_button);
         record_button = findViewById(R.id.record_button);
@@ -142,6 +151,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int protein = Integer.parseInt(proteinInput.getText().toString());
             int carbs = Integer.parseInt(carbsInput.getText().toString());
             int fat = Integer.parseInt(fatInput.getText().toString());
+
+            //adding data to entity object
+            RecordEntry myEntry = new RecordEntry();
+            myEntry.foodName = foodName;
+            myEntry.calories = calories;
+            myEntry.protein = protein;
+            myEntry.carbs = carbs;
+            myEntry.fat = fat;
+            myEntry.date = (int)System.currentTimeMillis();
+
+            new Thread(() -> db.recordsDao().insertEntry(myEntry)).start();
+
+
+
 
 // Add to lists
             foodList.add(foodName + " | " + calories + " cal | P:" + protein + " C:" + carbs + " F:" + fat);

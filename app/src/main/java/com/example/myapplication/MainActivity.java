@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ExecutorService executorService;
     RecordsDatabase db;
+    RecordsDao recordsDao;
 
 
     @Override
@@ -45,9 +46,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //this code handles the database object binding
-        db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "Kevin's-uber-cool-db").build();
-        RecordsDao recordsDao = db.recordsDao();
+        db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "appDataBase").build();
+        recordsDao = db.recordsDao();
         executorService = Executors.newSingleThreadExecutor();
+        //end of database binding
+
+
 
 
         settings_button = findViewById(R.id.settings_button);
@@ -161,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             myEntry.fat = fat;
             myEntry.date = (int)System.currentTimeMillis();
 
-            new Thread(() -> db.recordsDao().insertEntry(myEntry)).start();
+            new Thread(() -> recordsDao.insertEntry(myEntry)).start();
 
 
 

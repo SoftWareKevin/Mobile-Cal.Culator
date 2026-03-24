@@ -49,10 +49,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, int position) {
         RecordEntry currentItem = recordList.get(position);
         holder.foodName.setText(currentItem.foodName);
-        holder.calories.setText(String.valueOf(currentItem.calories));
-        holder.carbs.setText(String.valueOf(currentItem.carbs));
-        holder.fat.setText(String.valueOf(currentItem.fat));
-        holder.protein.setText(String.valueOf(currentItem.protein));
+        holder.calories.setText(currentItem.calories + " cal");
+        holder.carbs.setText(currentItem.carbs + "g of carbs");
+        holder.fat.setText(currentItem.fat + "g of fat");
+        holder.protein.setText(currentItem.protein + "g of protein");
     }
 
     @Override

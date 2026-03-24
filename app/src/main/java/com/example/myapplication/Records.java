@@ -5,27 +5,34 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.room.ColumnInfo;
-import androidx.room.Dao;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class Records extends AppCompatActivity {
+public class Records extends AppCompatActivity implements View.OnClickListener {
 
     Button deleteBtn;
     Button viewBtn;
-    ListView reportListView;
 
     ArrayList<String> reportList = new ArrayList<>();
-    ArrayAdapter<String> reportAdapter;
+    List<RecordEntry> records;
+    ExecutorService executorService;
+    RecordsDatabase db;
+    RecordsDao recordsDao;
+    CustomAdapter myAdapter;
+    RecyclerView myRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,31 +45,38 @@ public class Records extends AppCompatActivity {
             return insets;
         });
 
-        deleteBtn=findViewById(R.id.deleteReportBtn);
-        viewBtn=findViewById(R.id.viewReportBtn);
-        reportListView=findViewById(R.id.reportListView);
+        db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "appDataBase").build();
+        recordsDao = db.recordsDao();
+        executorService = Executors.newSingleThreadExecutor();
 
-        reportAdapter=new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, reportList);
-        reportListView.setAdapter(reportAdapter);
-        reportListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        myRecycler = findViewById(R.id.reportListView);
+        myAdapter = new CustomAdapter(records);
+        myRecycler.setAdapter(myAdapter);
+        myRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        deleteBtn.setOnClickListener(v -> {
-            int pos=reportListView.getCheckedItemPosition();
+        deleteBtn = findViewById(R.id.deleteReportBtn);
+        viewBtn = findViewById(R.id.viewReportBtn);
 
-            if(pos!=ListView.INVALID_POSITION) {
-                reportList.remove(pos);
-                reportAdapter.notifyDataSetChanged();
-                reportListView.clearChoices();
-            }
-        });
-        
-        viewBtn.setOnClickListener(v -> {
-            int pos=reportListView.getCheckedItemPosition();
-            if (pos != ListView.INVALID_POSITION) {
-                String r=reportList.get(pos);
-                Toast.makeText(this, r, Toast.LENGTH_SHORT).show();
-            }
-        });
+        deleteBtn.setOnClickListener(this);
+        viewBtn.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View v){
+        if (v.getId() == R.id.deleteReportBtn){
+            Toast.makeText(this, "Report Deleted", Toast.LENGTH_SHORT).show();
+        }
+        else if (v.getId() == R.id.viewReportBtn){
+
+            new Thread(()->{
+                List<RecordEntry> fetchedRecords = recordsDao.getAllRecords();
+                runOnUiThread(() -> {
+                    records = fetchedRecords;
+                    myAdapter.updateData(records);
+                });
+            }).start();
+
+            Toast.makeText(this, "Report Viewed", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

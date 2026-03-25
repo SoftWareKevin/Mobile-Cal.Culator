@@ -19,8 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button settings_button;
@@ -29,15 +27,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button removeBtn;
     ListView listView;
     TextView caloriesLeft;
+    TextView macrosText;
 
     ArrayList<String> foodList = new ArrayList<>();
     ArrayList<Integer> calorieList = new ArrayList<>();
+    ArrayList<Integer> proteinList = new ArrayList<>();
+    ArrayList<Integer> carbsList = new ArrayList<>();
+    ArrayList<Integer> fatList = new ArrayList<>();
     ArrayAdapter<String> adapter;
-
-    ExecutorService executorService;
-    RecordsDatabase db;
-    RecordsDao recordsDao;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        //this code handles the database object binding
-        db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "appDataBase").build();
-        recordsDao = db.recordsDao();
-        executorService = Executors.newSingleThreadExecutor();
-        //end of database binding
-
-
-
+        RecordsDatabase db = Room.databaseBuilder(
+                getApplicationContext(),
+                RecordsDatabase.class,
+                "Kevin's-uber-cool-db"
+        ).build();
 
         settings_button = findViewById(R.id.settings_button);
         record_button = findViewById(R.id.record_button);
@@ -60,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         removeBtn = findViewById(R.id.removeBtn);
         listView = findViewById(R.id.listView);
         caloriesLeft = findViewById(R.id.caloriesLeft);
+        macrosText = findViewById(R.id.macrosText);
 
         settings_button.setOnClickListener(this);
         record_button.setOnClickListener(this);
@@ -74,19 +69,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (pos != ListView.INVALID_POSITION) {
                 foodList.remove(pos);
                 calorieList.remove(pos);
+                proteinList.remove(pos);
+                carbsList.remove(pos);
+                fatList.remove(pos);
+
                 adapter.notifyDataSetChanged();
                 listView.clearChoices();
                 updateCaloriesLeft();
+                displayMacros();
             }
         });
 
         updateCaloriesLeft();
+        displayMacros();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateCaloriesLeft();
+        displayMacros();
     }
 
     @Override
@@ -123,8 +125,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int remaining = maxCalories - used;
         caloriesLeft.setText("Calories Left: " + remaining);
     }
-    private void showAddFoodDialog() {
 
+    private void displayMacros() {
+        SharedPreferences prefs = getSharedPreferences("UserSettings", MODE_PRIVATE);
+
+        if (!prefs.contains("calorieGoal") || !prefs.contains("weight")) {
+            macrosText.setText("Set your calorie goal and weight in Settings");
+            return;
+        }
+
+        int dailyCalories = prefs.getInt("calorieGoal", 2000);
+
+        double weightLbs;
+        try {
+            weightLbs = Double.parseDouble(prefs.getString("weight", "0"));
+        } catch (NumberFormatException e) {
+            weightLbs = 0;
+        }
+
+        double targetProtein = weightLbs;      // 1g protein per pound
+        double targetFat = weightLbs * 0.3;    // 0.3g fat per pound
+        double targetCarbs = (dailyCalories - (targetProtein * 4) - (targetFat * 9)) / 4.0;
+
+        if (targetCarbs < 0) {
+            targetCarbs = 0;
+        }
+
+        int eatenProtein = 0;
+        int eatenCarbs = 0;
+        int eatenFat = 0;
+
+        for (int p : proteinList) {
+            eatenProtein += p;
+        }
+        for (int c : carbsList) {
+            eatenCarbs += c;
+        }
+        for (int f : fatList) {
+            eatenFat += f;
+        }
+
+        double proteinLeft = targetProtein - eatenProtein;
+        double carbsLeft = targetCarbs - eatenCarbs;
+        double fatLeft = targetFat - eatenFat;
+
+        macrosText.setText(
+                "Protein Left: " + String.format("%.1f", proteinLeft) + " g\n" +
+                        "Carbs Left: " + String.format("%.1f", carbsLeft) + " g\n" +
+                        "Fat Left: " + String.format("%.1f", fatLeft) + " g"
+        );
+    }
+
+    private void showAddFoodDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_food, null);
 
@@ -156,32 +208,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int carbs = Integer.parseInt(carbsInput.getText().toString());
             int fat = Integer.parseInt(fatInput.getText().toString());
 
-            //adding data to entity object
-            RecordEntry myEntry = new RecordEntry();
-            myEntry.foodName = foodName;
-            myEntry.calories = calories;
-            myEntry.protein = protein;
-            myEntry.carbs = carbs;
-            myEntry.fat = fat;
-            myEntry.date = (int)System.currentTimeMillis();
-
-            new Thread(() -> recordsDao.insertEntry(myEntry)).start();
-
-
-
-
-// Add to lists
             foodList.add(foodName + " | " + calories + " cal | P:" + protein + " C:" + carbs + " F:" + fat);
             calorieList.add(calories);
+            proteinList.add(protein);
+            carbsList.add(carbs);
+            fatList.add(fat);
 
             adapter.notifyDataSetChanged();
             updateCaloriesLeft();
+            displayMacros();
 
             Toast.makeText(this, "Food Added!", Toast.LENGTH_SHORT).show();
         });
 
         builder.setNegativeButton("Cancel", null);
-
         builder.show();
     }
 }

@@ -12,6 +12,8 @@
         android:layout_width="211dp"
         android:layout_height="99dp"
         android:text="This is where the calorie budget will go right?"
+        android:textSize="16sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

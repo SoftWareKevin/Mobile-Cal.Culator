@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button removeBtn;
     ListView listView;
     TextView caloriesLeft;
-    TextView macrosText;
+    TextView proteinText;
+    TextView carbsText;
+    TextView fatText;
 
     ArrayList<String> foodList = new ArrayList<>();
     ArrayList<Integer> calorieList = new ArrayList<>();
@@ -54,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         removeBtn = findViewById(R.id.removeBtn);
         listView = findViewById(R.id.listView);
         caloriesLeft = findViewById(R.id.caloriesLeft);
-        macrosText = findViewById(R.id.macrosText);
+        proteinText = findViewById(R.id.proteinText);
+        carbsText = findViewById(R.id.carbsText);
+        fatText = findViewById(R.id.fatText);
 
         settings_button.setOnClickListener(this);
         record_button.setOnClickListener(this);
@@ -123,14 +127,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         int remaining = maxCalories - used;
-        caloriesLeft.setText("Calories Left: " + remaining);
+        caloriesLeft.setText(String.valueOf(remaining));
     }
 
     private void displayMacros() {
         SharedPreferences prefs = getSharedPreferences("UserSettings", MODE_PRIVATE);
 
         if (!prefs.contains("calorieGoal") || !prefs.contains("weight")) {
-            macrosText.setText("Set your calorie goal and weight in Settings");
+            proteinText.setText("PROTEIN: --");
+            carbsText.setText("CARBS: --");
+            fatText.setText("FAT: --");
             return;
         }
 
@@ -143,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             weightLbs = 0;
         }
 
-        double targetProtein = weightLbs;      // 1g protein per pound
-        double targetFat = weightLbs * 0.3;    // 0.3g fat per pound
+        double targetProtein = weightLbs;
+        double targetFat = weightLbs * 0.3;
         double targetCarbs = (dailyCalories - (targetProtein * 4) - (targetFat * 9)) / 4.0;
 
         if (targetCarbs < 0) {
@@ -169,11 +175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double carbsLeft = targetCarbs - eatenCarbs;
         double fatLeft = targetFat - eatenFat;
 
-        macrosText.setText(
-                "Protein Left: " + String.format("%.1f", proteinLeft) + " g\n" +
-                        "Carbs Left: " + String.format("%.1f", carbsLeft) + " g\n" +
-                        "Fat Left: " + String.format("%.1f", fatLeft) + " g"
-        );
+        proteinText.setText("PROTEIN: " + String.format("%.1f", proteinLeft) + "g");
+        carbsText.setText("CARBS: " + String.format("%.1f", carbsLeft) + "g");
+        fatText.setText("FAT: " + String.format("%.1f", fatLeft) + "g");
     }
 
     private void showAddFoodDialog() {

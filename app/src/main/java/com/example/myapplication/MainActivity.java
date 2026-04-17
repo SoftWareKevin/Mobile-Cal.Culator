@@ -225,8 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             myEntry.carbs = carbs;
             myEntry.fat = fat;
             myEntry.date = (int)System.currentTimeMillis();
-
-            new Thread(() -> db.recordsDao().insertEntry(myEntry)).start();
+            
             new Thread(()-> recordsDao.insertEntry(myEntry)).start();
 
             foodList.add(foodName + " | " + calories + " cal | P:" + protein + " C:" + carbs + " F:" + fat);

@@ -15,10 +15,8 @@ public interface RecordsDao {
     @Delete
     void deleteEntry(RecordEntry recordEntry);
 
-    @Query("SELECT * FROM RecordEntry WHERE date BETWEEN unixepoch(:date_start) AND unixepoch(:date_end, '-1 second')")
+    @Query("SELECT * FROM RecordEntry WHERE date >= :date_start AND date <= :date_end")
     List<RecordEntry> getRecordsByDate(long date_start, long date_end);
-
-
 
     @Query("SELECT * FROM RecordEntry")
     List<RecordEntry> getAllRecords();

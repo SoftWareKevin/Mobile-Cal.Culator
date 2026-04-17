@@ -50,8 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db = Room.databaseBuilder(
                 getApplicationContext(),
                 RecordsDatabase.class,
-                "appDataBase"
-        ).build();
+                "food_database"
+        ).fallbackToDestructiveMigration()
+        .build();
         recordsDao = db.recordsDao();
 
 
@@ -224,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             myEntry.protein = protein;
             myEntry.carbs = carbs;
             myEntry.fat = fat;
-            myEntry.date = (int)System.currentTimeMillis();
+            myEntry.date = System.currentTimeMillis();
             
             new Thread(()-> recordsDao.insertEntry(myEntry)).start();
 

@@ -10,7 +10,7 @@ public class RecordEntry {
     @PrimaryKey(autoGenerate = true)
     public int uid;
     @ColumnInfo
-    public int date; //uses the unix timestamp
+    public long date; //uses the unix timestamp
     @ColumnInfo
     public String foodName;
     @ColumnInfo

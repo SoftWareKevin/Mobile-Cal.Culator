@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getApplicationContext(),
                 RecordsDatabase.class,
                 "food_database"
-        ).fallbackToDestructiveMigration()
-        .build();
+        ).build();
         recordsDao = db.recordsDao();
 
 

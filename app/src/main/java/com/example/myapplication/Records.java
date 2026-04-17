@@ -2,9 +2,7 @@ package com.example.myapplication;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
@@ -21,6 +19,7 @@ import androidx.room.Room;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,7 +30,6 @@ public class Records extends AppCompatActivity implements View.OnClickListener {
     Button selectDateBtn;
     TextView selectedDateTv;
 
-    ArrayList<String> reportList = new ArrayList<>();
     List<RecordEntry> records;
     ExecutorService executorService;
     RecordsDatabase db;
@@ -128,7 +126,8 @@ public class Records extends AppCompatActivity implements View.OnClickListener {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            selectedDateTv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+            String dateString = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
+            selectedDateTv.setText(dateString);
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 }

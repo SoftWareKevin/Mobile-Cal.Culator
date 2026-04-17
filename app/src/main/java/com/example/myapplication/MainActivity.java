@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView proteinText;
     TextView carbsText;
     TextView fatText;
+    RecordsDatabase db;
+    RecordsDao recordsDao;
+
 
     ArrayList<String> foodList = new ArrayList<>();
     ArrayList<Integer> calorieList = new ArrayList<>();
@@ -44,11 +47,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        RecordsDatabase db = Room.databaseBuilder(
+        db = Room.databaseBuilder(
                 getApplicationContext(),
                 RecordsDatabase.class,
-                "Kevin's-uber-cool-db"
+                "appDataBase"
         ).build();
+        recordsDao = db.recordsDao();
+
 
         settings_button = findViewById(R.id.settings_button);
         record_button = findViewById(R.id.record_button);
@@ -211,6 +216,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int protein = Integer.parseInt(proteinInput.getText().toString());
             int carbs = Integer.parseInt(carbsInput.getText().toString());
             int fat = Integer.parseInt(fatInput.getText().toString());
+
+            //adding data to entity object
+            RecordEntry myEntry = new RecordEntry();
+            myEntry.foodName = foodName;
+            myEntry.calories = calories;
+            myEntry.protein = protein;
+            myEntry.carbs = carbs;
+            myEntry.fat = fat;
+            myEntry.date = (int)System.currentTimeMillis();
+
+            new Thread(() -> db.recordsDao().insertEntry(myEntry)).start();
+            new Thread(()-> recordsDao.insertEntry(myEntry)).start();
 
             foodList.add(foodName + " | " + calories + " cal | P:" + protein + " C:" + carbs + " F:" + fat);
             calorieList.add(calories);

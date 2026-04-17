@@ -51,7 +51,7 @@ public class Records extends AppCompatActivity implements View.OnClickListener {
         });
 
         db = Room.databaseBuilder(getApplicationContext(), RecordsDatabase.class, "food_database")
-                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigrationOnDowngrade()
                 .build();
         recordsDao = db.recordsDao();
         executorService = Executors.newSingleThreadExecutor();

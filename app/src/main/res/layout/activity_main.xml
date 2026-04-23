@@ -102,7 +102,7 @@
             android:id="@+id/foodText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="placeholder"
+            android:text="No food added yet"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:padding="12dp"

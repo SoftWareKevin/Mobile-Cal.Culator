@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         carbsText = findViewById(R.id.carbsText);
         fatText = findViewById(R.id.fatText);
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, foodList);
+        adapter = new ArrayAdapter<>(this, R.layout.list_item_white, android.R.id.text1, foodList);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 

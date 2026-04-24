@@ -2,114 +2,133 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#111111">
+    android:background="#111111"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/inputName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/inputWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Weight (lbs)"
-            android:inputType="numberDecimal"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SETTINGS"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:fontFamily="@font/digital_7"
+                android:letterSpacing="0.08"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="center_horizontal" />
 
-        <EditText
-            android:id="@+id/inputHeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Height (inches)"
-            android:inputType="numberDecimal"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            <EditText
+                android:id="@+id/inputName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <EditText
-            android:id="@+id/inputAge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Age"
-            android:inputType="number"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            <EditText
+                android:id="@+id/inputWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Weight (lbs)"
+                android:inputType="numberDecimal"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <EditText
-            android:id="@+id/inputGender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Gender (male/female)"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            <EditText
+                android:id="@+id/inputHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Height (inches)"
+                android:inputType="numberDecimal"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <EditText
-            android:id="@+id/inputGoalWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Goal Weight (lbs)"
-            android:inputType="numberDecimal"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            <EditText
+                android:id="@+id/inputAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:inputType="number"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <EditText
-            android:id="@+id/inputActivityLevel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Activity Level (1-4)"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#888888" />
+            <EditText
+                android:id="@+id/inputGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Gender (male/female)"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <Button
-            android:id="@+id/calculateCaloriesButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calculate Calorie Options"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="@android:color/darker_gray"
-            android:layout_marginTop="12dp" />
+            <EditText
+                android:id="@+id/inputGoalWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Goal Weight (lbs)"
+                android:inputType="numberDecimal"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <Spinner
-            android:id="@+id/spinnerCalories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#1e1e1e"
-            android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/inputActivityLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Activity Level (1-4)"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#888888" />
 
-        <Button
-            android:id="@+id/saveSettingsButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Settings"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/digital_7"
-            android:backgroundTint="#FF9500"
-            android:layout_marginTop="12dp" />
+            <Button
+                android:id="@+id/calculateCaloriesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Calculate Calorie Options"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="@android:color/darker_gray" />
 
+            <Spinner
+                android:id="@+id/spinnerCalories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#1e1e1e" />
+
+            <Button
+                android:id="@+id/saveSettingsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Save Settings"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/digital_7"
+                android:backgroundTint="#FF9500" />
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

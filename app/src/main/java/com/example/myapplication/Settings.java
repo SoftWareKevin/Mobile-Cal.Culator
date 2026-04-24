@@ -92,10 +92,10 @@ public class Settings extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item,
                 calorieOptions
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerCalories.setAdapter(adapter);
 
         Toast.makeText(this, "Calorie options calculated", Toast.LENGTH_SHORT).show();

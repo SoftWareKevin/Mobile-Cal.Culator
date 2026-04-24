@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#111111">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,64 +14,102 @@
             android:id="@+id/inputName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name" />
+            android:hint="Name"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/inputWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Weight (lbs)"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/inputHeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Height (inches)"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/inputAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Age"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/inputGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Gender (male/female)" />
+            android:hint="Gender (male/female)"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/inputGoalWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Goal Weight (lbs)"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/inputActivityLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Activity Level (1-4)" />
+            android:hint="Activity Level (1-4)"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#888888" />
 
         <Button
             android:id="@+id/calculateCaloriesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calculate Calorie Options" />
+            android:text="Calculate Calorie Options"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="@android:color/darker_gray"
+            android:layout_marginTop="12dp" />
 
         <Spinner
             android:id="@+id/spinnerCalories"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#1e1e1e"
+            android:layout_marginTop="8dp" />
 
         <Button
             android:id="@+id/saveSettingsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Settings" />
+            android:text="Save Settings"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/digital_7"
+            android:backgroundTint="#FF9500"
+            android:layout_marginTop="12dp" />
 
     </LinearLayout>
 </ScrollView>

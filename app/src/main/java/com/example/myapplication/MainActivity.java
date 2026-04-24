@@ -20,11 +20,13 @@ import androidx.room.Room;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button settings_button;
-    Button record_button;
-    Button add_food_button;
-    Button removeBtn;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
+
+public class MainActivity extends AppCompatActivity {
+
+    BottomNavigationView bottomNav;
     ListView listView;
     TextView caloriesLeft;
     TextView proteinText;
@@ -47,6 +49,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        bottomNav = findViewById(R.id.bottomNav);
+
+        bottomNav.setOnItemSelectedListener(item -> {
+
+            int id = item.getItemId();
+
+            if (id == R.id.nav_settings) {
+                startActivity(new Intent(this, Settings.class));
+                return true;
+            }
+
+            if (id == R.id.nav_records) {
+                startActivity(new Intent(this, Records.class));
+                return true;
+            }
+
+            if (id == R.id.nav_add) {
+                showAddFoodDialog();
+                return true;
+            }
+
+            if (id == R.id.nav_remove) {
+                int pos = listView.getCheckedItemPosition();
+                if (pos != ListView.INVALID_POSITION) {
+                    foodList.remove(pos);
+                    calorieList.remove(pos);
+                    proteinList.remove(pos);
+                    carbsList.remove(pos);
+                    fatList.remove(pos);
+
+                    adapter.notifyDataSetChanged();
+                    listView.clearChoices();
+                    updateCaloriesLeft();
+                    displayMacros();
+                }
+                return true;
+            }
+
+            return false;
+        });
+
         db = Room.databaseBuilder(
                 getApplicationContext(),
                 RecordsDatabase.class,
@@ -56,39 +99,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recordsDao = db.recordsDao();
 
 
-        settings_button = findViewById(R.id.settings_button);
-        record_button = findViewById(R.id.record_button);
-        add_food_button = findViewById(R.id.add_food_button);
-        removeBtn = findViewById(R.id.removeBtn);
         listView = findViewById(R.id.listView);
         caloriesLeft = findViewById(R.id.caloriesLeft);
         proteinText = findViewById(R.id.proteinText);
         carbsText = findViewById(R.id.carbsText);
         fatText = findViewById(R.id.fatText);
 
-        settings_button.setOnClickListener(this);
-        record_button.setOnClickListener(this);
-        add_food_button.setOnClickListener(this);
-
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, foodList);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        removeBtn.setOnClickListener(v -> {
-            int pos = listView.getCheckedItemPosition();
-            if (pos != ListView.INVALID_POSITION) {
-                foodList.remove(pos);
-                calorieList.remove(pos);
-                proteinList.remove(pos);
-                carbsList.remove(pos);
-                fatList.remove(pos);
-
-                adapter.notifyDataSetChanged();
-                listView.clearChoices();
-                updateCaloriesLeft();
-                displayMacros();
-            }
-        });
 
         updateCaloriesLeft();
         displayMacros();
@@ -99,22 +119,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         updateCaloriesLeft();
         displayMacros();
-    }
-
-    @Override
-    public void onClick(View v){
-        Intent myIntent;
-        if (v.getId() == R.id.settings_button){
-            myIntent = new Intent(this, Settings.class);
-            startActivity(myIntent);
-        }
-        else if (v.getId() == R.id.record_button){
-            myIntent = new Intent(this, Records.class);
-            startActivity(myIntent);
-        }
-        else if (v.getId() == R.id.add_food_button){
-            showAddFoodDialog();
-        }
     }
 
     private void updateCaloriesLeft() {
